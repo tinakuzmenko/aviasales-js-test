@@ -1,0 +1,46 @@
+{
+  "name": "aviasales-js-test",
+  "version": "1.0.0",
+  "description": "Test Assignment for aviasales.ru",
+  "scripts": {
+    "stylelint": "stylelint \"source/scss/**/*.(scss|css)\"",
+    "eslint": "eslint \"source/js/**/*.js\"",
+    "test": "concurrently npm:stylelint npm:eslint",
+    "build": "webpack -p",
+    "prettier": "prettier --write \"source/(scss|js)/**/*.(scss|css|js|json)\"",
+    "start": "webpack-dev-server --open"
+  },
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "10.0.0",
+    "babel-loader": "8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "6.0.3",
+    "css-loader": "4.2.1",
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "0.9.0",
+    "node-sass": "4.14.1",
+    "optimize-css-assets-webpack-plugin": "5.0.3",
+    "postcss-loader": "3.0.0",
+    "preload-webpack-plugin": "^3.0.0-beta.3",
+    "prettier": "^2.0.5",
+    "sass-loader": "10.0.2",
+    "stylelint": "13.7.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recommended-scss": "^4.2.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-prettier": "^1.1.2",
+    "stylelint-scss": "^3.18.0",
+    "terser-webpack-plugin": "4.2.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0"
+  }
+}
