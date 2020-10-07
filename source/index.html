@@ -4,11 +4,311 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
-    <meta name="description" content="" />
-    <title></title>
+    <meta name="description" content="Aviasales Test Assignment" />
+    <title>Aviasales Test Assignment</title>
     <link rel="stylesheet" href="/vendors/normalize-css/normalize.min.css" />
   </head>
   <body>
-    <h1>Hello world!</h1>
+    <header class="page-header">
+      <div class="container">
+        <img
+          class="logo"
+          src="./img/Logo.svg"
+          alt="Логотип Aviasales"
+          width="82"
+          height="89"
+        />
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <h1 class="visually-hidden">Поиск дешевых авиабилетов</h1>
+        <div class="main-content-wrapper">
+          <aside class="filter main-content-wrapper__filter">
+            <h2 class="filter__title">Количество пересадок</h2>
+            <form action="#" method="get">
+              <input
+                class="filter__checkbox visually-hidden"
+                type="checkbox"
+                name="all"
+                id="all"
+              />
+              <label class="filter__checkbox-label" for="all">Все</label>
+              <input
+                class="filter__checkbox visually-hidden"
+                type="checkbox"
+                name="direct"
+                id="direct"
+              />
+              <label class="filter__checkbox-label" for="direct"
+                >Без пересадок</label
+              >
+              <input
+                class="filter__checkbox visually-hidden"
+                type="checkbox"
+                name="1-transfer"
+                id="1-transfer"
+              />
+              <label class="filter__checkbox-label" for="1-transfer"
+                >1 пересадка</label
+              >
+              <input
+                class="filter__checkbox visually-hidden"
+                type="checkbox"
+                name="2-transfers"
+                id="2-transfers"
+              />
+              <label class="filter__checkbox-label" for="2-transfers"
+                >2 пересадки</label
+              >
+              <input
+                class="filter__checkbox visually-hidden"
+                type="checkbox"
+                name="3-transfers"
+                id="3-transfers"
+              />
+              <label class="filter__checkbox-label" for="3-transfers"
+                >3 пересадки</label
+              >
+            </form>
+          </aside>
+          <section class="tickets">
+            <h2 class="visually-hidden">Результаты поиска</h2>
+            <div class="sort tickets__sort">
+              <button class="sort__button sort__button--active" type="button">
+                Самый дешевый
+              </button>
+              <button class="sort__button" type="button">Самый быстрый</button>
+            </div>
+            <div class="tickets__wrapper">
+              <div class="ticket tickets__item">
+                <div class="ticket__wrapper">
+                  <p class="ticket__price">13 400 Р</p>
+                  <img
+                    class="ticket__avia-logo"
+                    src="./img/s7-logo.png"
+                    alt="Логотип авиакомпании"
+                    width="110"
+                    height="36"
+                  />
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">10:45</time>
+                      –
+                      <time class="ticket__end-time">08:00</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">21ч 15м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">2 пересадки</p>
+                    <p class="ticket__value">HKG, JNB</p>
+                  </div>
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">11:20</time>
+                      –
+                      <time class="ticket__end-time">00:50</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">13ч 30м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">1 пересадка</p>
+                    <p class="ticket__value">HKG</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ticket tickets__item">
+                <div class="ticket__wrapper">
+                  <p class="ticket__price">13 400 Р</p>
+                  <img
+                    class="ticket__avia-logo"
+                    src="./img/s7-logo.png"
+                    alt="Логотип авиакомпании"
+                    width="110"
+                    height="36"
+                  />
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">10:45</time>
+                      –
+                      <time class="ticket__end-time">08:00</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">21ч 15м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">2 пересадки</p>
+                    <p class="ticket__value">HKG, JNB</p>
+                  </div>
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">11:20</time>
+                      –
+                      <time class="ticket__end-time">00:50</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">13ч 30м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">1 пересадка</p>
+                    <p class="ticket__value">HKG</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ticket tickets__item">
+                <div class="ticket__wrapper">
+                  <p class="ticket__price">13 400 Р</p>
+                  <img
+                    class="ticket__avia-logo"
+                    src="./img/s7-logo.png"
+                    alt="Логотип авиакомпании"
+                    width="110"
+                    height="36"
+                  />
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">10:45</time>
+                      –
+                      <time class="ticket__end-time">08:00</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">21ч 15м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">2 пересадки</p>
+                    <p class="ticket__value">HKG, JNB</p>
+                  </div>
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">11:20</time>
+                      –
+                      <time class="ticket__end-time">00:50</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">13ч 30м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">1 пересадка</p>
+                    <p class="ticket__value">HKG</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ticket tickets__item">
+                <div class="ticket__wrapper">
+                  <p class="ticket__price">13 400 Р</p>
+                  <img
+                    class="ticket__avia-logo"
+                    src="./img/s7-logo.png"
+                    alt="Логотип авиакомпании"
+                    width="110"
+                    height="36"
+                  />
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">10:45</time>
+                      –
+                      <time class="ticket__end-time">08:00</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">21ч 15м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">2 пересадки</p>
+                    <p class="ticket__value">HKG, JNB</p>
+                  </div>
+                </div>
+                <div class="ticket__row">
+                  <div class="ticket__col">
+                    <p class="ticket__label">
+                      <span class="ticket__origin"> MOW </span>
+                      –
+                      <span class="ticket__destination">HKT</span>
+                    </p>
+                    <p class="ticket__value">
+                      <time class="ticket__start-time">11:20</time>
+                      –
+                      <time class="ticket__end-time">00:50</time>
+                    </p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">В пути</p>
+                    <p class="ticket__value">13ч 30м</p>
+                  </div>
+                  <div class="ticket__col">
+                    <p class="ticket__label">1 пересадка</p>
+                    <p class="ticket__value">HKG</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
   </body>
 </html>

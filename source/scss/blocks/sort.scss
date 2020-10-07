@@ -1,0 +1,37 @@
+.sort {
+  display: flex;
+  width: 100%;
+}
+
+.sort__button {
+  display: flex;
+  width: 50%;
+  background-color: $white;
+  border: 1px solid $stroke-color;
+  border-radius: 5px;
+  padding: 15px;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  cursor: pointer;
+
+  &:first-child {
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    margin-left: -1px;
+  }
+
+  &--active {
+    background-color: $primary-accent;
+    border-color: $primary-accent;
+    color: $white;
+  }
+}

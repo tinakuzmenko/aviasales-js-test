@@ -9,8 +9,8 @@ html {
 }
 
 body {
-  background-color: $white;
-  color: $black;
+  background-color: $background;
+  color: $main-font-color;
   font-family: $main-font;
   font-size: 13px;
   font-weight: normal;
@@ -20,6 +20,7 @@ body {
 }
 
 img {
+  display: block;
   max-width: 100%;
 }
 
