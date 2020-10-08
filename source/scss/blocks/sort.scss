@@ -1,15 +1,20 @@
 .sort {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
+
+  @media (min-width: $md) {
+    flex-wrap: nowrap;
+  }
 }
 
 .sort__button {
   display: flex;
-  width: 50%;
+  width: 100%;
   background-color: $white;
   border: 1px solid $stroke-color;
   border-radius: 5px;
-  padding: 15px;
+  padding: 14px;
   justify-content: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -18,20 +23,24 @@
   line-height: 20px;
   cursor: pointer;
 
-  &:first-child {
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
-  }
-
-  &:last-child {
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
-    margin-left: -1px;
-  }
-
   &--active {
     background-color: $primary-accent;
     border-color: $primary-accent;
     color: $white;
+  }
+
+  @media (min-width: $md) {
+    width: 50%;
+
+    &:first-child {
+      border-bottom-right-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0px;
+      margin-left: -1px;
+    }
   }
 }

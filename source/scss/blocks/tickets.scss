@@ -1,5 +1,10 @@
 .tickets {
-  flex-grow: 1;
+  width: 100%;
+
+  @media (min-width: $xl) {
+    width: auto;
+    flex-grow: 1;
+  }
 }
 
 .tickets__sort {

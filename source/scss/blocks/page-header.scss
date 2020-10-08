@@ -1,4 +1,9 @@
 .page-header {
-  padding-top: 40px;
-  padding-bottom: 31px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  @media (min-width: $md) {
+    padding-top: 40px;
+    padding-bottom: 31px;
+  }
 }
