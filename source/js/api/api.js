@@ -13,16 +13,10 @@ const ResponseStatus = {
 };
 
 export default class API {
-  constructor() {}
-
-  async getData() {
-    this.searchID = await this.getSearchID();
-
-    if (this.searchID) {
-      return this._loadData({
-        url: `${ServerUrl.TICKETS}?searchId=${this.searchID.searchId}`,
-      }).then(response => response.json());
-    }
+  async getData(searchId) {
+    return await this._loadData({
+      url: `${ServerUrl.TICKETS}?searchId=${searchId}`,
+    }).then(response => response.json());
   }
 
   async getSearchID() {

@@ -27,10 +27,15 @@ const ticketsWrapper = mainContentWrapper.querySelector('.tickets__wrapper');
 
 render(ticketsWrapper, sortComponent, RenderPosition.BEFOREBEGIN);
 
-api.getData().then(serverData => {
-  const tickets = serverData.tickets;
-  tickets.forEach(ticket => {
-    const ticketComponent = new Ticket(ticket);
-    render(ticketsWrapper, ticketComponent);
+api.getSearchID().then(response => {
+  const searchId = response.searchId;
+
+  api.getData(searchId).then(serverData => {
+    const tickets = serverData.tickets;
+
+    tickets.forEach(ticket => {
+      const ticketComponent = new Ticket(ticket);
+      render(ticketsWrapper, ticketComponent);
+    });
   });
 });
