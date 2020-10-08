@@ -10,6 +10,7 @@ export default class PageFilter extends AbstractComponent {
           type="checkbox"
           name="all"
           id="all"
+          checked
         />
         <label class="filter__checkbox-label" for="all">Все</label>
         <input

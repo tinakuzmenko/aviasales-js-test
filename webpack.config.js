@@ -82,10 +82,6 @@ module.exports = {
           from: './source/img',
           to: './img',
         },
-        {
-          from: './source/vendors',
-          to: './vendors',
-        },
       ],
     }),
   ],

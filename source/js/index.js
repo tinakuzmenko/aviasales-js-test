@@ -6,12 +6,14 @@ import Ticket from './components/ticket/ticket';
 import TicketsContainer from './components/tickets/tickets';
 import { RenderPosition } from './helpers/constants.js';
 import { render } from './helpers/render.js';
+import API from './api/api';
 
 const pageHeaderComponent = new PageHeader();
 const pageMainComponent = new PageMain();
 const pageFilterComponent = new PageFilter();
 const ticketsContainerComponent = new TicketsContainer();
 const sortComponent = new Sort();
+const api = new API();
 
 render(document.body, pageHeaderComponent);
 render(document.body, pageMainComponent);
@@ -25,11 +27,10 @@ const ticketsWrapper = mainContentWrapper.querySelector('.tickets__wrapper');
 
 render(ticketsWrapper, sortComponent, RenderPosition.BEFOREBEGIN);
 
-const renderTickets = amount => {
-  for (let i = 0; i < amount; i++) {
-    const ticketComponent = new Ticket();
+api.getData().then(serverData => {
+  const tickets = serverData.tickets;
+  tickets.forEach(ticket => {
+    const ticketComponent = new Ticket(ticket);
     render(ticketsWrapper, ticketComponent);
-  }
-};
-
-renderTickets(5);
+  });
+});
