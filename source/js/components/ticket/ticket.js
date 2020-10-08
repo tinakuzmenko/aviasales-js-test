@@ -1,5 +1,10 @@
 import AbstractComponent from '../abstract-component.js';
-import { getTimeFromDate, getEndDate } from '../../helpers/dates';
+import { countStops, formatTicketPrice } from '../../helpers/utils';
+import {
+  getTimeFromDate,
+  getEndDate,
+  convertMinutesToHours,
+} from '../../helpers/dates';
 
 export default class Ticket extends AbstractComponent {
   constructor(ticket) {
@@ -9,9 +14,11 @@ export default class Ticket extends AbstractComponent {
   }
 
   getTemplate() {
+    const ticketPrice = formatTicketPrice(this._ticket.price);
+
     return `<div class="ticket tickets__item">
           <div class="ticket__wrapper">
-            <p class="ticket__price">${this._ticket.price} Р</p>
+            <p class="ticket__price">${ticketPrice} Р</p>
             <img
               class="ticket__avia-logo"
               src="https://pics.avs.io/99/36/${this._ticket.carrier}.png"
@@ -27,7 +34,8 @@ export default class Ticket extends AbstractComponent {
       .map(ticketSegment => {
         const startDate = getTimeFromDate(ticketSegment.date);
         const endDate = getEndDate(ticketSegment.date, ticketSegment.duration);
-
+        const flightDuration = convertMinutesToHours(ticketSegment.duration);
+        const stopsLabel = countStops(ticketSegment.stops);
         return `<div class="ticket__row">
             <div class="ticket__col">
               <p class="ticket__label">
@@ -41,10 +49,10 @@ export default class Ticket extends AbstractComponent {
             </div>
             <div class="ticket__col">
               <p class="ticket__label">В пути</p>
-              <p class="ticket__value">${ticketSegment.duration}</p>
+              <p class="ticket__value">${flightDuration}</p>
             </div>
             <div class="ticket__col">
-              <p class="ticket__label">1 пересадка</p>
+              <p class="ticket__label">${stopsLabel}</p>
               <p class="ticket__value">${ticketSegment.stops.join(', ')}</p>
             </div>
           </div>`;
