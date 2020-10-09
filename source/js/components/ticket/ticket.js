@@ -33,9 +33,11 @@ export default class Ticket extends AbstractComponent {
     return this._ticketSegments
       .map(ticketSegment => {
         const startDate = getTimeFromDate(ticketSegment.date);
+        // console.log(ticketSegment.date, startDate);
         const endDate = getEndDate(ticketSegment.date, ticketSegment.duration);
         const flightDuration = convertMinutesToHours(ticketSegment.duration);
         const stopsLabel = countStops(ticketSegment.stops);
+
         return `<div class="ticket__row">
             <div class="ticket__col">
               <p class="ticket__label">

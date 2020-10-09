@@ -70,7 +70,7 @@ module.exports = {
     }),
     new PreloadWebpackPlugin({
       rel: 'preload',
-      include: 'allChunks', // or 'initial', or 'allAssets'
+      include: 'allChunks',
     }),
     new CopyWebpackPlugin({
       patterns: [

@@ -16,31 +16,25 @@ export default class API {
   async getData(searchId) {
     return await this._loadData({
       url: `${ServerUrl.TICKETS}?searchId=${searchId}`,
-    }).then(response => response.json());
+    });
   }
 
   async getSearchID() {
     return await this._loadData({
       url: ServerUrl.SEARCH,
-    }).then(response => response.json());
+    });
   }
 
-  _loadData({ url, method = Method.GET }) {
-    return fetch(url, { method })
-      .then(this._checkStatus)
-      .catch(error => {
-        throw error;
-      });
-  }
+  async _loadData({ url, method = Method.GET }) {
+    let response = await fetch(url, { method });
 
-  _checkStatus(response) {
     if (
       response.status >= ResponseStatus.OK &&
       response.status < ResponseStatus.REDIRECT
     ) {
-      return response;
-    } else {
-      throw new Error(`${response.status}: ${response.statusText}`);
+      return await response.json();
     }
+
+    throw new Error(`${response.status}: ${response.statusText}`);
   }
 }
