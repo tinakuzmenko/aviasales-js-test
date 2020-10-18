@@ -23,7 +23,7 @@ export default class TicketsModel {
       setTimeout(() => {
         console.log('Fetching again');
         this.fetchData(this.id.searchId);
-      }, 1000);
+      }, 100);
     }
   }
 

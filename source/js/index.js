@@ -5,9 +5,10 @@ import Sort from './components/sort/sort';
 import Ticket from './components/ticket/ticket';
 import TicketsContainer from './components/tickets/tickets';
 import { RenderPosition } from './helpers/constants.js';
-import { render } from './helpers/render.js';
+import { remove, render } from './helpers/render.js';
 import API from './api/api';
 import TicketsModel from './model/tickets';
+import Loader from './components/loader/loader';
 
 const api = new API();
 
@@ -29,15 +30,17 @@ const ticketsWrapper = mainContentWrapper.querySelector('.tickets__wrapper');
 
 render(ticketsWrapper, sortComponent, RenderPosition.BEFOREBEGIN);
 
-const renderTicket = ticket => {
-  const ticketComponent = new Ticket(ticket);
-  render(ticketsWrapper, ticketComponent);
-};
+const loader = new Loader();
+
+render(ticketsWrapper, loader);
 
 const getAllTickets = (tickets, status) => {
   if (status) {
+    remove(loader);
+
     for (let i = 0; i < 5; i++) {
-      renderTicket(tickets[i]);
+      const ticketComponent = new Ticket(tickets[i]);
+      render(ticketsWrapper, ticketComponent);
     }
   }
 };
