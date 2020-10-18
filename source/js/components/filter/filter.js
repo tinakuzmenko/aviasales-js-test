@@ -1,53 +1,42 @@
-import AbstractComponent from '../abstract-component.js';
+import AbstractComponent from '../abstract-component';
+import { filterMap } from '../../helpers/constants';
 
 export default class PageFilter extends AbstractComponent {
+  constructor() {
+    super();
+
+    this.filters = Object.keys(filterMap);
+    console.log(this.filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, evt => {
+      const filterName = evt.target.id;
+      handler(filterName);
+    });
+  }
+
   getTemplate() {
     return `<aside class="filter main-content-wrapper__filter">
       <h2 class="filter__title">Количество пересадок</h2>
       <form action="#" method="get">
-        <input
-          class="filter__checkbox visually-hidden"
-          type="checkbox"
-          name="all"
-          id="all"
-          checked
-        />
-        <label class="filter__checkbox-label" for="all">Все</label>
-        <input
-          class="filter__checkbox visually-hidden"
-          type="checkbox"
-          name="direct"
-          id="direct"
-        />
-        <label class="filter__checkbox-label" for="direct">Без пересадок</label>
-        <input
-          class="filter__checkbox visually-hidden"
-          type="checkbox"
-          name="1-transfer"
-          id="1-transfer"
-        />
-        <label class="filter__checkbox-label" for="1-transfer"
-          >1 пересадка</label
-        >
-        <input
-          class="filter__checkbox visually-hidden"
-          type="checkbox"
-          name="2-transfers"
-          id="2-transfers"
-        />
-        <label class="filter__checkbox-label" for="2-transfers"
-          >2 пересадки</label
-        >
-        <input
-          class="filter__checkbox visually-hidden"
-          type="checkbox"
-          name="3-transfers"
-          id="3-transfers"
-        />
-        <label class="filter__checkbox-label" for="3-transfers"
-          >3 пересадки</label
-        >
+        ${this.filters
+          .map(filter => this.createFilterTemplate(filter))
+          .join('')}
       </form>
     </aside>`;
+  }
+
+  createFilterTemplate(filter) {
+    return `<input
+          class="filter__checkbox visually-hidden"
+          type="checkbox"
+          name="${filter}"
+          id="${filter}"
+          ${filter === 'all' ? 'checked' : ''}
+        />
+        <label class="filter__checkbox-label" for="${filter}"
+          >${filterMap[filter]}</label
+        >`;
   }
 }

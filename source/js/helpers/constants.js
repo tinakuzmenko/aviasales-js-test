@@ -8,3 +8,11 @@ export const RenderPosition = {
 };
 
 export const MINUTES_IN_HOUR = 60;
+
+export const filterMap = {
+  all: 'Все',
+  direct: 'Без пересадок',
+  '1-transfer': '1 пересадка',
+  '2-transfers': '2 пересадки',
+  '3-transfers': '3 пересадки',
+};

@@ -1,9 +1,9 @@
 export default class TicketsModel {
-  constructor(api, getAllTickets) {
+  constructor(api, renderTickets) {
     this.api = api;
     this.isServerSearchStop = false;
     this.tickets = [];
-    this.getAllTickets = getAllTickets;
+    this.renderTickets = renderTickets;
   }
 
   async fetchData() {
@@ -14,7 +14,7 @@ export default class TicketsModel {
 
       if (serverData.stop) {
         this.isServerSearchStop = !this.isServerSearchStop;
-        this.getAllTickets(this.tickets, this.isServerSearchStop);
+        this.renderTickets(this.tickets, this.isServerSearchStop);
         return;
       }
     }
@@ -34,5 +34,9 @@ export default class TicketsModel {
     if (this.isServerSearchStop) {
       this.getAllTickets(this.tickets);
     }
+  }
+
+  setFilter(filter) {
+    console.log(filter);
   }
 }
