@@ -1,6 +1,5 @@
 import { format, addMinutes } from 'date-fns';
-
-const MINUTES_IN_HOUR = 60;
+import { MINUTES_IN_HOUR } from './constants';
 
 export const getTimeFromDate = date => format(new Date(date), 'HH:mm');
 

@@ -6,3 +6,5 @@ export const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
   BEFOREEND: `beforeend`,
 };
+
+export const MINUTES_IN_HOUR = 60;

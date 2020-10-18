@@ -7,13 +7,15 @@ import TicketsContainer from './components/tickets/tickets';
 import { RenderPosition } from './helpers/constants.js';
 import { render } from './helpers/render.js';
 import API from './api/api';
+import TicketsModel from './model/tickets';
+
+const api = new API();
 
 const pageHeaderComponent = new PageHeader();
 const pageMainComponent = new PageMain();
 const pageFilterComponent = new PageFilter();
 const ticketsContainerComponent = new TicketsContainer();
 const sortComponent = new Sort();
-const api = new API();
 
 render(document.body, pageHeaderComponent);
 render(document.body, pageMainComponent);
@@ -27,15 +29,18 @@ const ticketsWrapper = mainContentWrapper.querySelector('.tickets__wrapper');
 
 render(ticketsWrapper, sortComponent, RenderPosition.BEFOREBEGIN);
 
-api.getSearchID().then(response => {
-  const searchId = response.searchId;
+const renderTicket = ticket => {
+  const ticketComponent = new Ticket(ticket);
+  render(ticketsWrapper, ticketComponent);
+};
 
-  api.getData(searchId).then(serverData => {
-    const tickets = serverData.tickets;
+const getAllTickets = (tickets, status) => {
+  if (status) {
+    for (let i = 0; i < 5; i++) {
+      renderTicket(tickets[i]);
+    }
+  }
+};
 
-    tickets.forEach(ticket => {
-      const ticketComponent = new Ticket(ticket);
-      render(ticketsWrapper, ticketComponent);
-    });
-  });
-});
+const ticketsModel = new TicketsModel(api, getAllTickets);
+ticketsModel.getTickets();

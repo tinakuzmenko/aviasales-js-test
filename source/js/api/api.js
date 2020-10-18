@@ -10,6 +10,7 @@ const Method = {
 const ResponseStatus = {
   OK: 200,
   REDIRECT: 300,
+  SERVER_ERROR: 500,
 };
 
 export default class API {
@@ -33,6 +34,10 @@ export default class API {
       response.status < ResponseStatus.REDIRECT
     ) {
       return await response.json();
+    }
+
+    if (response.status === ResponseStatus.SERVER_ERROR) {
+      return;
     }
 
     throw new Error(`${response.status}: ${response.statusText}`);
