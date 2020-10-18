@@ -6,13 +6,22 @@ export default class PageFilter extends AbstractComponent {
     super();
 
     this.filters = Object.keys(filterMap);
-    console.log(this.filters);
+    this.activeFilters = ['all'];
   }
 
   setFilterChangeHandler(handler) {
     this.getElement().addEventListener(`change`, evt => {
-      const filterName = evt.target.id;
-      handler(filterName);
+      const filter = evt.target;
+
+      if (filter.checked) {
+        this.activeFilters.push(evt.target.id);
+      } else {
+        this.activeFilters = this.activeFilters.filter(
+          activeFilter => activeFilter !== filter.id,
+        );
+      }
+
+      handler(this.activeFilters);
     });
   }
 

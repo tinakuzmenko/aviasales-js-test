@@ -36,7 +36,7 @@ export default class TicketsModel {
     }
   }
 
-  setFilter(filter) {
-    console.log(filter);
+  setFilter(activeFilters) {
+    console.log(activeFilters);
   }
 }
