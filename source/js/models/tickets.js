@@ -38,7 +38,7 @@ export default class TicketsModel {
 
   filterTickets(activeFilters) {
     this.filteredTickets = [];
-
+    console.log(activeFilters);
     if (activeFilters.includes('all')) {
       this.filteredTickets = [...this.tickets];
     } else {

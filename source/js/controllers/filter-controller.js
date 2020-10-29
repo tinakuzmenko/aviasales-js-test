@@ -17,12 +17,11 @@ export default class FilterController {
     this._filterComponent.setFilterChangeHandler(
       debounce(this._filterChangeHandler),
     );
+
     render(this._container, this._filterComponent);
   }
 
   _filterChangeHandler(activeFilters) {
     this._ticketsModel.filterTickets(activeFilters);
-    console.log(activeFilters);
-    // this._activeFilter = filter;
   }
 }
