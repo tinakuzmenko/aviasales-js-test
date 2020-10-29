@@ -7,6 +7,9 @@ export default class FilterController {
     this._container = container;
     this._ticketsModel = ticketsModel;
     this._filterComponent = null;
+    this._filtersElements = null;
+    this._filterAllTickets = null;
+    this._activeFilters = ['all'];
 
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
   }
@@ -19,9 +22,50 @@ export default class FilterController {
     );
 
     render(this._container, this._filterComponent);
+
+    this._filtersElements = this._filterComponent
+      .getElement()
+      .querySelectorAll('input[type="checkbox"]');
+    this._filterAllTickets = this._filterComponent
+      .getElement()
+      .querySelector('#all');
   }
 
-  _filterChangeHandler(activeFilters) {
-    this._ticketsModel.filterTickets(activeFilters);
+  _filterChangeHandler(filter) {
+    this._activeFilters = [];
+
+    if (
+      filter.id === this._filterAllTickets.id &&
+      this._filterAllTickets.checked
+    ) {
+      this._chooseAllTickets();
+    } else {
+      this._chooseFilters();
+    }
+
+    this._ticketsModel.filterTickets(this._activeFilters);
+  }
+
+  _chooseAllTickets() {
+    this._filtersElements.forEach(filterElement => {
+      filterElement.checked = filterElement.id === this._filterAllTickets.id;
+    });
+
+    this._activeFilters.push(this._filterAllTickets.id);
+    this._activeFilters = this._activeFilters.filter(
+      activeFilter => activeFilter === this._filterAllTickets.id,
+    );
+  }
+
+  _chooseFilters() {
+    this._filterAllTickets.checked = false;
+    this._filtersElements.forEach(filterElement => {
+      if (
+        filterElement.checked &&
+        filterElement.id !== this._filterAllTickets.id
+      ) {
+        this._activeFilters.push(filterElement.id);
+      }
+    });
   }
 }

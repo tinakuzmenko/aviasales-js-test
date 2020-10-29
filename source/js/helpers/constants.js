@@ -16,3 +16,10 @@ export const filterMap = {
   '2-transfers': '2 пересадки',
   '3-transfers': '3 пересадки',
 };
+
+export const filterValuesMap = {
+  0: 'direct',
+  1: '1-transfer',
+  2: '2-transfers',
+  3: '3-transfers',
+};

@@ -1,6 +1,6 @@
 import { render } from '../helpers/render';
 import Ticket from '../components/ticket/ticket';
-import { countStops } from '../helpers/utils';
+import { filterValuesMap } from '../helpers/constants';
 
 export default class TicketsModel {
   constructor(api, loader) {
@@ -42,13 +42,21 @@ export default class TicketsModel {
     if (activeFilters.includes('all')) {
       this.filteredTickets = [...this.tickets];
     } else {
-      this.tickets.forEach(ticket => {
-        const transfersNumber = ticket.segments;
+      this.filteredTickets = this.tickets.filter(ticket => {
+        const seg1 = ticket.segments[0].stops.length;
+        const seg2 = ticket.segments[1].stops.length;
+
+        if (
+          activeFilters.includes(filterValuesMap[seg1]) &&
+          activeFilters.includes(filterValuesMap[seg2])
+        ) {
+          return ticket;
+        }
       });
     }
 
-    console.log('this.filteredTickets:', this.filteredTickets);
-    // this.renderTickets(this.filteredTickets);
+    console.log(this.filteredTickets);
+    this.renderTickets(this.filteredTickets);
   }
 
   renderTickets(tickets) {
