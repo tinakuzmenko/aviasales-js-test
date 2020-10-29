@@ -1,5 +1,6 @@
 import PageFilter from '../components/filter/filter';
 import { render } from '../helpers/render.js';
+import { debounce } from '../helpers/debounce';
 
 export default class FilterController {
   constructor(container, ticketsModel) {
@@ -12,13 +13,16 @@ export default class FilterController {
 
   render() {
     this._filterComponent = new PageFilter();
-    this._filterComponent.setFilterChangeHandler(this._filterChangeHandler);
 
+    this._filterComponent.setFilterChangeHandler(
+      debounce(this._filterChangeHandler),
+    );
     render(this._container, this._filterComponent);
   }
 
-  _filterChangeHandler(filter) {
-    this._ticketsModel.setFilter(filter);
-    this._activeFilter = filter;
+  _filterChangeHandler(activeFilters) {
+    this._ticketsModel.filterTickets(activeFilters);
+    console.log(activeFilters);
+    // this._activeFilter = filter;
   }
 }

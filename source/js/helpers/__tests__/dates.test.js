@@ -5,5 +5,6 @@ describe('getTimeFromDate', () => {
     const date = '2020-10-12T11:57:00.000Z';
 
     expect(getTimeFromDate(date)).not.toBeUndefined();
+    expect(getTimeFromDate(date)).toBe('13:57');
   });
 });

@@ -1,9 +1,13 @@
+import { render } from '../helpers/render';
+import Ticket from '../components/ticket/ticket';
+import { countStops } from '../helpers/utils';
+
 export default class TicketsModel {
-  constructor(api, renderTickets) {
+  constructor(api, loader) {
     this.api = api;
     this.isServerSearchStop = false;
     this.tickets = [];
-    this.renderTickets = renderTickets;
+    this.loader = loader;
   }
 
   async fetchData() {
@@ -14,29 +18,51 @@ export default class TicketsModel {
 
       if (serverData.stop) {
         this.isServerSearchStop = !this.isServerSearchStop;
-        this.renderTickets(this.tickets, this.isServerSearchStop);
+        this.renderTickets(this.tickets);
         return;
       }
     }
 
     if (!serverData || !serverData.stop) {
       setTimeout(() => {
-        console.log('Fetching again');
         this.fetchData(this.id.searchId);
       }, 100);
     }
   }
 
-  async getTickets() {
+  async initTickets(ticketsWrapper) {
+    this.ticketsWrapper = ticketsWrapper;
     this.id = await this.api.getSearchID();
     await this.fetchData();
+  }
 
+  filterTickets(activeFilters) {
+    this.filteredTickets = [];
+
+    if (activeFilters.includes('all')) {
+      this.filteredTickets = [...this.tickets];
+    } else {
+      this.tickets.forEach(ticket => {
+        const transfersNumber = ticket.segments;
+      });
+    }
+
+    console.log('this.filteredTickets:', this.filteredTickets);
+    // this.renderTickets(this.filteredTickets);
+  }
+
+  renderTickets(tickets) {
     if (this.isServerSearchStop) {
-      this.getAllTickets(this.tickets);
+      this.removeTickets();
+
+      for (let i = 0; i < 5; i++) {
+        const ticketComponent = new Ticket(tickets[i]);
+        render(this.ticketsWrapper, ticketComponent);
+      }
     }
   }
 
-  setFilter(activeFilters) {
-    console.log(activeFilters);
+  removeTickets() {
+    this.ticketsWrapper.innerHTML = '';
   }
 }
