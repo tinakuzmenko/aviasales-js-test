@@ -8,7 +8,8 @@ export default class PageFilter extends AbstractComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`change`, evt => {
+    this._formElement = this.getElement().querySelector('#filter-form');
+    this._formElement.addEventListener(`change`, evt => {
       handler(evt.target);
     });
   }
@@ -16,7 +17,7 @@ export default class PageFilter extends AbstractComponent {
   getTemplate() {
     return `<aside class="filter main-content-wrapper__filter">
       <h2 class="filter__title">Количество пересадок</h2>
-      <form action="#" method="get">
+      <form action="#" method="get" id="filter-form">
         ${this._filters
           .map(filter => this._createFilterTemplate(filter))
           .join('')}

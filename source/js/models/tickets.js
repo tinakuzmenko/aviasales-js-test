@@ -1,63 +1,65 @@
-import { render } from '../helpers/render';
 import Ticket from '../components/ticket/ticket';
 import { filterValuesMap } from '../helpers/constants';
+import { render } from '../helpers/render';
+import Error from '../components/error/error';
 
 export default class TicketsModel {
-  constructor(api, loader) {
-    this.api = api;
-    this.loader = loader;
-
-    this.isServerSearchStop = false;
-    this.tickets = [];
-    this.filteredTickets = [];
-    this._sortType = '';
+  constructor(api) {
+    this._api = api;
+    this._isServerSearchStop = false;
+    this._tickets = [];
+    this._filteredTickets = [];
+    this._sortType = 'cheap';
   }
 
   async fetchData() {
-    const serverData = await this.api.getData(this.id.searchId);
+    const serverData = await this._api.getData(this._id.searchId);
 
     if (serverData) {
-      this.tickets = [...this.tickets, ...serverData.tickets];
+      this._tickets = [...this._tickets, ...serverData.tickets];
 
       if (serverData.stop) {
-        this.isServerSearchStop = !this.isServerSearchStop;
+        this._isServerSearchStop = !this._isServerSearchStop;
+        this._filteredTickets = this._sortTickets([...this._tickets]);
 
-        this.filteredTickets = this._sortTickets(this.tickets.slice());
-        this.renderTickets(this.filteredTickets);
+        this._clearTicketsBoard();
+        this._renderTickets(this._filteredTickets);
+
         return;
       }
     }
 
     if (!serverData || !serverData.stop) {
       setTimeout(() => {
-        this.fetchData(this.id.searchId);
+        this.fetchData(this._id.searchId);
       }, 100);
     }
   }
 
   async initTickets(ticketsWrapper) {
-    this.ticketsWrapper = ticketsWrapper;
-    this.id = await this.api.getSearchID();
+    this._ticketsWrapper = ticketsWrapper;
+    this._id = await this._api.getSearchID();
     await this.fetchData();
   }
 
   setActiveSort(activeSort) {
     this._sortType = activeSort;
-    this.filteredTickets = this._sortTickets(
-      this.filteredTickets,
+    this._filteredTickets = this._sortTickets(
+      this._filteredTickets,
       this._sortType,
     );
-    this.removeTickets();
-    this.renderTickets(this.filteredTickets);
+
+    this._clearTicketsBoard();
+    this._renderTickets(this._filteredTickets);
   }
 
   filterTickets(activeFilters) {
-    this.filteredTickets = [];
+    this._filteredTickets = [];
 
-    if (activeFilters.includes('all')) {
-      this.filteredTickets = [...this.tickets];
+    if (!activeFilters || activeFilters.includes('all')) {
+      this._filteredTickets = [...this._tickets];
     } else {
-      this.filteredTickets = this.tickets.filter(ticket => {
+      this._filteredTickets = this._tickets.filter(ticket => {
         const firstSegmentStops = ticket.segments[0].stops.length;
         const secondSegmentStops = ticket.segments[1].stops.length;
 
@@ -70,26 +72,39 @@ export default class TicketsModel {
       });
     }
 
-    this.filteredTickets = this._sortTickets(
-      this.filteredTickets,
+    this._filteredTickets = this._sortTickets(
+      this._filteredTickets,
       this._sortType,
     );
-    this.renderTickets(this.filteredTickets);
+
+    this._clearTicketsBoard();
+    this._renderTickets(this._filteredTickets);
   }
 
-  renderTickets(tickets) {
-    if (this.isServerSearchStop) {
-      this.removeTickets();
-
+  _renderTickets(tickets) {
+    if (tickets.length !== 0) {
       for (let i = 0; i < 5; i++) {
-        const ticketComponent = new Ticket(tickets[i]);
-        render(this.ticketsWrapper, ticketComponent);
+        this._renderTicket(tickets[i]);
       }
+    } else {
+      this._renderError(
+        'Извините, по выбранным вами параметрам ничего не найдено.',
+      );
     }
   }
 
-  removeTickets() {
-    this.ticketsWrapper.innerHTML = '';
+  _renderTicket(ticket) {
+    const ticketComponent = new Ticket(ticket);
+    render(this._ticketsWrapper, ticketComponent);
+  }
+
+  _renderError(errorMessage) {
+    const errorComponent = new Error(errorMessage);
+    render(this._ticketsWrapper, errorComponent);
+  }
+
+  _clearTicketsBoard() {
+    this._ticketsWrapper.innerHTML = '';
   }
 
   _sortTickets(tickets, sortType = 'cheap') {
@@ -110,8 +125,6 @@ export default class TicketsModel {
           );
           return prevTicketDuration - nextTicketDuration;
         });
-      default:
-        return;
     }
   }
 }

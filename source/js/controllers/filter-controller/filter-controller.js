@@ -38,15 +38,15 @@ export default class FilterController {
       filter.id === this._filterAllTickets.id &&
       this._filterAllTickets.checked
     ) {
-      this._chooseAllTickets();
+      this._setAllTicketsFilter();
     } else {
-      this._chooseFilters();
+      this._setFilters();
     }
 
     this._ticketsModel.filterTickets(this._activeFilters);
   }
 
-  _chooseAllTickets() {
+  _setAllTicketsFilter() {
     this._filtersElements.forEach(filterElement => {
       filterElement.checked = filterElement.id === this._filterAllTickets.id;
     });
@@ -57,7 +57,7 @@ export default class FilterController {
     );
   }
 
-  _chooseFilters() {
+  _setFilters() {
     this._filterAllTickets.checked = false;
     this._filtersElements.forEach(filterElement => {
       if (
