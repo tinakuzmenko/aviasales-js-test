@@ -1,6 +1,6 @@
-import PageFilter from '../components/filter/filter';
-import { render } from '../helpers/render.js';
-import { debounce } from '../helpers/debounce';
+import PageFilter from '../../components/filter/filter';
+import { render } from '../../helpers/render.js';
+import { debounce } from '../../helpers/debounce';
 
 export default class FilterController {
   constructor(container, ticketsModel) {

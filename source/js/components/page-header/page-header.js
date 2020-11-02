@@ -6,7 +6,7 @@ export default class PageHeader extends AbstractComponent {
       <div class="container">
         <img
           class="logo"
-          src="./img/Logo.svg"
+          src="/img/Logo.svg"
           alt="Логотип Aviasales"
           width="82"
           height="89"

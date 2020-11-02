@@ -5,9 +5,12 @@ import { filterValuesMap } from '../helpers/constants';
 export default class TicketsModel {
   constructor(api, loader) {
     this.api = api;
+    this.loader = loader;
+
     this.isServerSearchStop = false;
     this.tickets = [];
-    this.loader = loader;
+    this.filteredTickets = [];
+    this._sortType = '';
   }
 
   async fetchData() {
@@ -18,7 +21,9 @@ export default class TicketsModel {
 
       if (serverData.stop) {
         this.isServerSearchStop = !this.isServerSearchStop;
-        this.renderTickets(this.tickets);
+
+        this.filteredTickets = this._sortTickets(this.tickets.slice());
+        this.renderTickets(this.filteredTickets);
         return;
       }
     }
@@ -36,26 +41,39 @@ export default class TicketsModel {
     await this.fetchData();
   }
 
+  setActiveSort(activeSort) {
+    this._sortType = activeSort;
+    this.filteredTickets = this._sortTickets(
+      this.filteredTickets,
+      this._sortType,
+    );
+    this.removeTickets();
+    this.renderTickets(this.filteredTickets);
+  }
+
   filterTickets(activeFilters) {
     this.filteredTickets = [];
-    console.log(activeFilters);
+
     if (activeFilters.includes('all')) {
       this.filteredTickets = [...this.tickets];
     } else {
       this.filteredTickets = this.tickets.filter(ticket => {
-        const seg1 = ticket.segments[0].stops.length;
-        const seg2 = ticket.segments[1].stops.length;
+        const firstSegmentStops = ticket.segments[0].stops.length;
+        const secondSegmentStops = ticket.segments[1].stops.length;
 
         if (
-          activeFilters.includes(filterValuesMap[seg1]) &&
-          activeFilters.includes(filterValuesMap[seg2])
+          activeFilters.includes(filterValuesMap[firstSegmentStops]) &&
+          activeFilters.includes(filterValuesMap[secondSegmentStops])
         ) {
           return ticket;
         }
       });
     }
 
-    console.log(this.filteredTickets);
+    this.filteredTickets = this._sortTickets(
+      this.filteredTickets,
+      this._sortType,
+    );
     this.renderTickets(this.filteredTickets);
   }
 
@@ -72,5 +90,28 @@ export default class TicketsModel {
 
   removeTickets() {
     this.ticketsWrapper.innerHTML = '';
+  }
+
+  _sortTickets(tickets, sortType = 'cheap') {
+    switch (sortType) {
+      case 'cheap':
+        return tickets.sort(
+          (prevTicket, nextTicket) => prevTicket.price - nextTicket.price,
+        );
+      case 'fast':
+        return tickets.sort((prevTicket, nextTicket) => {
+          const prevTicketDuration = parseInt(
+            prevTicket.segments[0].duration + prevTicket.segments[1].duration,
+            10,
+          );
+          const nextTicketDuration = parseInt(
+            nextTicket.segments[0].duration + nextTicket.segments[1].duration,
+            10,
+          );
+          return prevTicketDuration - nextTicketDuration;
+        });
+      default:
+        return;
+    }
   }
 }

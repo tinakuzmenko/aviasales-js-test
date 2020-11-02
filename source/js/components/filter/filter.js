@@ -1,10 +1,10 @@
 import AbstractComponent from '../abstract-component';
-import { HIDDEN_CLASS, filterMap } from '../../helpers/constants';
+import { ClassName, filterDescriptionsMap } from '../../helpers/constants';
 
 export default class PageFilter extends AbstractComponent {
   constructor() {
     super();
-    this._filters = Object.keys(filterMap);
+    this._filters = Object.keys(filterDescriptionsMap);
   }
 
   setFilterChangeHandler(handler) {
@@ -26,14 +26,14 @@ export default class PageFilter extends AbstractComponent {
 
   _createFilterTemplate(filter) {
     return `<input
-          class="filter__checkbox ${HIDDEN_CLASS}"
+          class="filter__checkbox ${ClassName.HIDDEN_CLASS}"
           type="checkbox"
           name="${filter}"
           id="${filter}"
           ${filter === 'all' ? 'checked' : ''}
         />
         <label class="filter__checkbox-label" for="${filter}"
-          >${filterMap[filter]}</label
+          >${filterDescriptionsMap[filter]}</label
         >`;
   }
 }
