@@ -1,17 +1,4 @@
-const ServerUrl = {
-  SEARCH: 'https://front-test.beta.aviasales.ru/search',
-  TICKETS: 'https://front-test.beta.aviasales.ru/tickets',
-};
-
-const Method = {
-  GET: `GET`,
-};
-
-const ResponseStatus = {
-  OK: 200,
-  REDIRECT: 300,
-  SERVER_ERROR: 500,
-};
+import { Method, ResponseStatus, ServerUrl } from '../helpers/constants';
 
 export default class API {
   async getData(searchId) {

@@ -7,6 +7,6 @@ export default class Error extends AbstractComponent {
   }
 
   getTemplate() {
-    return `<p>${this._errorMessage}</p>`;
+    return `<p class="error">${this._errorMessage}</p>`;
   }
 }

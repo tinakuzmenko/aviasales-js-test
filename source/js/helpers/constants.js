@@ -1,4 +1,20 @@
 export const MINUTES_IN_HOUR = 60;
+export const MIN_SHOWN_TICKETS = 5;
+
+export const ServerUrl = {
+  SEARCH: 'https://front-test.beta.aviasales.ru/search',
+  TICKETS: 'https://front-test.beta.aviasales.ru/tickets',
+};
+
+export const Method = {
+  GET: `GET`,
+};
+
+export const ResponseStatus = {
+  OK: 200,
+  REDIRECT: 300,
+  SERVER_ERROR: 500,
+};
 
 export const ClassName = {
   HIDDEN_CLASS: 'visually-hidden',
