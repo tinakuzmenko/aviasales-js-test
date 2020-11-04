@@ -7,6 +7,7 @@ import TicketsModel from './models/tickets';
 import FilterController from './controllers/filter-controller/filter-controller';
 import SortController from './controllers/sort-controller/sort-controller';
 import { render } from './helpers/render.js';
+import ScrollObserver from './observers/scroll-observer';
 
 const api = new API();
 const loader = new Loader();
@@ -22,14 +23,12 @@ const mainContentWrapper = document.querySelector('.main-content-wrapper');
 const filterController = new FilterController(mainContentWrapper, ticketsModel);
 
 filterController.render();
-
 render(mainContentWrapper, ticketsContainerComponent);
 
 const ticketsWrapper = mainContentWrapper.querySelector('.tickets__wrapper');
 const sortController = new SortController(ticketsWrapper, ticketsModel);
 
 sortController.render();
-
 render(ticketsWrapper, loader);
 
 ticketsModel.initTickets(ticketsWrapper);

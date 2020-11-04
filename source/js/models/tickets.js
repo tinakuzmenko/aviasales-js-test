@@ -1,35 +1,37 @@
 import Ticket from '../components/ticket/ticket';
+import Error from '../components/error/error';
+import ScrollObserver from '../observers/scroll-observer';
 import { filterValuesMap, MIN_SHOWN_TICKETS } from '../helpers/constants';
 import { render } from '../helpers/render';
-import Error from '../components/error/error';
-import LazyLoadingObserver from '../observers/lazy-loading-observer';
 
 export default class TicketsModel {
   constructor(api) {
     this._api = api;
-    this._isServerSearchStop = false;
-    this._tickets = [];
-    this._filteredTickets = [];
-    this._sortType = 'cheap';
-    this._shownTickets = 0;
 
-    this._intersectionHandler = this._intersectionHandler.bind(this);
+    this._filteredTickets = [];
+    this._id = '';
+    this._shownTickets = 0;
+    this._sortType = 'cheap';
+    this._tickets = [];
+    this._ticketsWrapper = null;
+
+    this._catchLoadErrorHandler = this._catchLoadErrorHandler.bind(this);
+    this._scrollHandler = this._scrollHandler.bind(this);
   }
 
   async fetchData() {
-    const serverData = await this._api.getData(this._id.searchId);
+    const serverData = await this._api
+      .getData(this._id.searchId)
+      .catch(this._catchLoadErrorHandler);
 
     if (serverData) {
       this._tickets = [...this._tickets, ...serverData.tickets];
 
       if (serverData.stop) {
-        this._isServerSearchStop = !this._isServerSearchStop;
         this._filteredTickets = this._sortTickets([...this._tickets]);
 
         this._clearTicketsBoard();
-        this._renderTickets(this._filteredTickets);
-        this._initLazyLoading();
-        this._lazyLoadingObserver.observeIntersection();
+        this._renderTickets();
 
         return;
       }
@@ -44,8 +46,8 @@ export default class TicketsModel {
 
   async initTickets(ticketsWrapper) {
     this._ticketsWrapper = ticketsWrapper;
-    this._id = await this._api.getSearchID();
-    await this.fetchData();
+    this._id = await this._api.getSearchID().catch(this._catchLoadErrorHandler);
+    await this.fetchData().catch(this._catchLoadErrorHandler);
   }
 
   setActiveSort(activeSort) {
@@ -58,29 +60,17 @@ export default class TicketsModel {
     );
 
     this._clearTicketsBoard();
-    this._renderTickets(this._filteredTickets);
-    this._lazyLoadingObserver.observeIntersection();
+    this._renderTickets();
   }
 
-  filterTickets(activeFilters) {
+  setActiveFilters(activeFilters) {
     this._filteredTickets = [];
     this._shownTickets = 0;
 
     if (!activeFilters || activeFilters.includes('all')) {
       this._filteredTickets = [...this._tickets];
     } else {
-      this._filteredTickets = this._tickets.filter(ticket => {
-        if (
-          activeFilters.includes(
-            filterValuesMap[ticket.segments[0].stops.length],
-          ) &&
-          activeFilters.includes(
-            filterValuesMap[ticket.segments[1].stops.length],
-          )
-        ) {
-          return ticket;
-        }
-      });
+      this._applyFilters(activeFilters);
     }
 
     this._filteredTickets = this._sortTickets(
@@ -89,36 +79,32 @@ export default class TicketsModel {
     );
 
     this._clearTicketsBoard();
-    this._renderTickets(this._filteredTickets);
-    this._lazyLoadingObserver.observeIntersection();
+    this._renderTickets();
   }
 
-  _renderError(errorMessage) {
-    const errorComponent = new Error(errorMessage);
-    render(this._ticketsWrapper, errorComponent);
-  }
+  _renderTickets() {
+    if (!this._scrollObserver) {
+      this._createScrollObserver();
+    }
 
-  _renderTickets(tickets) {
-    if (tickets.length !== 0) {
+    if (this._filteredTickets.length !== 0) {
       const shownTicketsAmount = this._shownTickets + MIN_SHOWN_TICKETS;
 
       for (let i = this._shownTickets; i < shownTicketsAmount; i++) {
-        this._renderTicket(tickets[i]);
+        this._renderTicket(this._filteredTickets[i]);
         this._shownTickets++;
       }
 
-      console.log('rendering new pack of tickets!');
-      console.log(this._shownTickets);
+      const newTarget = this._ticketsWrapper.lastChild;
+      this._scrollObserver.setTarget(newTarget);
+
+      console.log('rendering new pack of tickets!', this._shownTickets);
     }
 
-    if (tickets.length === 0 && this._shownTickets === 0) {
+    if (this._filteredTickets.length === 0 && this._shownTickets === 0) {
       this._renderError(
         'Извините, по выбранным вами параметрам ничего не найдено.',
       );
-    }
-
-    if (tickets.length === 0) {
-      this._renderError('Это все найденные билеты.');
     }
   }
 
@@ -127,8 +113,11 @@ export default class TicketsModel {
     render(this._ticketsWrapper, ticketComponent);
   }
 
-  _clearTicketsBoard() {
-    this._ticketsWrapper.innerHTML = '';
+  _renderError(errorMessage) {
+    const errorComponent = new Error(errorMessage);
+
+    this._clearTicketsBoard();
+    render(this._ticketsWrapper, errorComponent);
   }
 
   _sortTickets(tickets, sortType = 'cheap') {
@@ -139,34 +128,49 @@ export default class TicketsModel {
         );
       case 'fast':
         return tickets.sort((prevTicket, nextTicket) => {
-          const prevTicketDuration = parseInt(
-            prevTicket.segments[0].duration + prevTicket.segments[1].duration,
-            10,
-          );
-          const nextTicketDuration = parseInt(
-            nextTicket.segments[0].duration + nextTicket.segments[1].duration,
-            10,
-          );
-          return prevTicketDuration - nextTicketDuration;
+          const prevDuration =
+            prevTicket.segments[0].duration + prevTicket.segments[1].duration;
+          const nextDuration =
+            nextTicket.segments[0].duration + nextTicket.segments[1].duration;
+          return prevDuration - nextDuration;
         });
     }
   }
 
-  _intersectionHandler() {
-    setTimeout(() => this._renderTickets(this._filteredTickets), 1000);
+  _applyFilters(activeFilters) {
+    this._filteredTickets = this._tickets.filter(ticket => {
+      if (
+        activeFilters.includes(
+          filterValuesMap[ticket.segments[0].stops.length],
+        ) &&
+        activeFilters.includes(filterValuesMap[ticket.segments[1].stops.length])
+      ) {
+        return ticket;
+      }
+    });
   }
 
-  _initLazyLoading() {
-    this._options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0,
-    };
+  _clearTicketsBoard() {
+    this._ticketsWrapper.innerHTML = '';
+  }
 
-    this._lazyLoadingObserver = new LazyLoadingObserver(
-      this._ticketsWrapper,
-      this._intersectionHandler,
-      this._options,
+  _catchLoadErrorHandler() {
+    this._renderError(
+      'Произошла ошибка загрузки данных, пожалуйста, попробуйте позже',
     );
+  }
+
+  _createScrollObserver() {
+    this._scrollObserver = new ScrollObserver(this._scrollHandler);
+  }
+
+  _scrollHandler(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        console.log('It works!', entry);
+        this._renderTickets();
+        //check the amount if array.length % 5 !== 0
+      }
+    });
   }
 }

@@ -6,10 +6,11 @@ export default class FilterController {
   constructor(container, ticketsModel) {
     this._container = container;
     this._ticketsModel = ticketsModel;
+
+    this._activeFilters = ['all'];
+    this._filterAllTicketsElement = null;
     this._filterComponent = null;
     this._filtersElements = null;
-    this._filterAllTickets = null;
-    this._activeFilters = ['all'];
 
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
   }
@@ -26,7 +27,7 @@ export default class FilterController {
     this._filtersElements = this._filterComponent
       .getElement()
       .querySelectorAll('input[type="checkbox"]');
-    this._filterAllTickets = this._filterComponent
+    this._filterAllTicketsElement = this._filterComponent
       .getElement()
       .querySelector('#all');
   }
@@ -35,34 +36,35 @@ export default class FilterController {
     this._activeFilters = [];
 
     if (
-      filter.id === this._filterAllTickets.id &&
-      this._filterAllTickets.checked
+      filter.id === this._filterAllTicketsElement.id &&
+      this._filterAllTicketsElement.checked
     ) {
       this._setAllTicketsFilter();
     } else {
       this._setFilters();
     }
 
-    this._ticketsModel.filterTickets(this._activeFilters);
+    this._ticketsModel.setActiveFilters(this._activeFilters);
   }
 
   _setAllTicketsFilter() {
     this._filtersElements.forEach(filterElement => {
-      filterElement.checked = filterElement.id === this._filterAllTickets.id;
+      filterElement.checked =
+        filterElement.id === this._filterAllTicketsElement.id;
     });
 
-    this._activeFilters.push(this._filterAllTickets.id);
+    this._activeFilters.push(this._filterAllTicketsElement.id);
     this._activeFilters = this._activeFilters.filter(
-      activeFilter => activeFilter === this._filterAllTickets.id,
+      activeFilter => activeFilter === this._filterAllTicketsElement.id,
     );
   }
 
   _setFilters() {
-    this._filterAllTickets.checked = false;
+    this._filterAllTicketsElement.checked = false;
     this._filtersElements.forEach(filterElement => {
       if (
         filterElement.checked &&
-        filterElement.id !== this._filterAllTickets.id
+        filterElement.id !== this._filterAllTicketsElement.id
       ) {
         this._activeFilters.push(filterElement.id);
       }
