@@ -1,4 +1,4 @@
-#Aviasales Test Assignment (Vanilla JS) ✈️
+# Aviasales Test Assignment (Vanilla JS) ✈️
 
 > Test Assignment for Aviasales made on Vanilla JavaScript (ES6).
 >
