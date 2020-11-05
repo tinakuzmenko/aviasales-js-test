@@ -2,7 +2,7 @@
 
 Test Assignment for Aviasales made on Vanilla JavaScript (ES6).
 
-🔎 **[Watch project live]()**
+🔎 **[Watch project live](https://aviasales-js-test.vercel.app/)**
 
 The project is a simple SPA, that imitates flight tickets search. Besides the basic tasks, I made many improvements to the app, such as:
 - responsive design,
