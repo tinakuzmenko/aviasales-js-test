@@ -1,4 +1,4 @@
-import { Method, ResponseStatus, ServerUrl } from '../helpers/constants';
+import { Method, ResponseStatus, ServerUrl } from '../utils/constants';
 
 export default class API {
   async getData(searchId) {

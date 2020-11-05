@@ -1,5 +1,5 @@
 import AbstractComponent from '../abstract-component';
-import { ClassName, filterDescriptionsMap } from '../../helpers/constants';
+import { ClassName, filterDescriptionsMap } from '../../utils/constants';
 
 export default class PageFilter extends AbstractComponent {
   constructor() {

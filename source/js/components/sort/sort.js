@@ -1,5 +1,5 @@
 import AbstractComponent from '../abstract-component.js';
-import { ClassName } from '../../helpers/constants';
+import { ClassName } from '../../utils/constants';
 
 export default class Sort extends AbstractComponent {
   constructor() {

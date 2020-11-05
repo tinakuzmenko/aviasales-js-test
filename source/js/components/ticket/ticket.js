@@ -1,10 +1,6 @@
 import AbstractComponent from '../abstract-component.js';
-import { countStops, formatTicketPrice } from '../../helpers/utils';
-import {
-  getTimeFromDate,
-  getEndDate,
-  convertMinutesToHours,
-} from '../../helpers/dates';
+import { MINUTES_IN_HOUR } from '../../utils/constants';
+import { addMinutes, format } from 'date-fns';
 
 export default class Ticket extends AbstractComponent {
   constructor(ticket) {
@@ -14,7 +10,7 @@ export default class Ticket extends AbstractComponent {
   }
 
   getTemplate() {
-    const ticketPrice = formatTicketPrice(this._ticket.price);
+    const ticketPrice = this._formatTicketPrice(this._ticket.price);
 
     return `<div class="ticket tickets__item">
           <div class="ticket__wrapper">
@@ -25,17 +21,22 @@ export default class Ticket extends AbstractComponent {
               alt="${this._ticket.carrier}"
             />
           </div>
-          ${this.renderSegment()}
+          ${this._renderSegment()}
         </div>`;
   }
 
-  renderSegment() {
+  _renderSegment() {
     return this._ticketSegments
       .map(ticketSegment => {
-        const startDate = getTimeFromDate(ticketSegment.date);
-        const endDate = getEndDate(ticketSegment.date, ticketSegment.duration);
-        const flightDuration = convertMinutesToHours(ticketSegment.duration);
-        const stopsLabel = countStops(ticketSegment.stops);
+        const startDate = this._getTimeFromDate(ticketSegment.date);
+        const endDate = this._getEndDate(
+          ticketSegment.date,
+          ticketSegment.duration,
+        );
+        const flightDuration = this._convertMinutesToHours(
+          ticketSegment.duration,
+        );
+        const stopsLabel = this._countStops(ticketSegment.stops);
 
         return `<div class="ticket__row">
             <div class="ticket__col">
@@ -59,5 +60,50 @@ export default class Ticket extends AbstractComponent {
           </div>`;
       })
       .join(``);
+  }
+
+  _getTimeFromDate(date) {
+    return format(new Date(date), 'HH:mm');
+  }
+
+  _getEndDate(date, duration) {
+    const endDate = addMinutes(new Date(date), duration);
+    return format(endDate, 'HH:mm');
+  }
+
+  _convertMinutesToHours(duration) {
+    if (duration / MINUTES_IN_HOUR >= 1) {
+      const hours = `${Math.trunc(duration / MINUTES_IN_HOUR)}ч`;
+      const minutes =
+        duration % MINUTES_IN_HOUR > 0 ? `${duration % MINUTES_IN_HOUR}м` : ``;
+
+      return `${hours} ${minutes}`;
+    }
+
+    return `${duration}м`;
+  }
+
+  _countStops(stops) {
+    switch (stops.length) {
+      case 0:
+        return 'Без пересадок';
+      case 1:
+        return `${stops.length} пересадка`;
+      case stops.length > 1 && stops.length < 5:
+        return `${stops.length} пересадки`;
+      case stops.length >= 5:
+        return `${stops.length} пересадок`;
+      default:
+        return `Без пересадок`;
+    }
+  }
+
+  _formatTicketPrice(price) {
+    const priceString = price.toString();
+    return (
+      priceString.substring(0, priceString.length - 3) +
+      ' ' +
+      priceString.substring(priceString.length, priceString.length - 3)
+    );
   }
 }

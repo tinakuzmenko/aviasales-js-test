@@ -1,12 +1,14 @@
 import Ticket from '../components/ticket/ticket';
 import Error from '../components/error/error';
 import ScrollObserver from '../observers/scroll-observer';
-import { filterValuesMap, MIN_SHOWN_TICKETS } from '../helpers/constants';
-import { render } from '../helpers/render';
+import { filterValuesMap, MIN_SHOWN_TICKETS } from '../utils/constants';
+import { remove, render } from '../utils/render';
 
 export default class TicketsModel {
-  constructor(api) {
+  constructor(api, counter, loader) {
     this._api = api;
+    this._counter = counter;
+    this._loader = loader;
 
     this._filteredTickets = [];
     this._id = '';
@@ -29,9 +31,7 @@ export default class TicketsModel {
 
       if (serverData.stop) {
         this._filteredTickets = this._sortTickets([...this._tickets]);
-
-        this._clearTicketsBoard();
-        this._renderTickets();
+        this._rerenderTicketsBoard();
 
         return;
       }
@@ -39,7 +39,7 @@ export default class TicketsModel {
 
     if (!serverData || !serverData.stop) {
       setTimeout(() => {
-        this.fetchData(this._id.searchId);
+        this.fetchData();
       }, 100);
     }
   }
@@ -47,7 +47,7 @@ export default class TicketsModel {
   async initTickets(ticketsWrapper) {
     this._ticketsWrapper = ticketsWrapper;
     this._id = await this._api.getSearchID().catch(this._catchLoadErrorHandler);
-    await this.fetchData().catch(this._catchLoadErrorHandler);
+    await this.fetchData();
   }
 
   setActiveSort(activeSort) {
@@ -59,8 +59,7 @@ export default class TicketsModel {
       this._sortType,
     );
 
-    this._clearTicketsBoard();
-    this._renderTickets();
+    this._rerenderTicketsBoard();
   }
 
   setActiveFilters(activeFilters) {
@@ -78,8 +77,7 @@ export default class TicketsModel {
       this._sortType,
     );
 
-    this._clearTicketsBoard();
-    this._renderTickets();
+    this._rerenderTicketsBoard();
   }
 
   _renderTickets() {
@@ -97,8 +95,6 @@ export default class TicketsModel {
 
       const newTarget = this._ticketsWrapper.lastChild;
       this._scrollObserver.setTarget(newTarget);
-
-      console.log('rendering new pack of tickets!', this._shownTickets);
     }
 
     if (this._filteredTickets.length === 0 && this._shownTickets === 0) {
@@ -109,6 +105,10 @@ export default class TicketsModel {
   }
 
   _renderTicket(ticket) {
+    if (!ticket) {
+      return;
+    }
+
     const ticketComponent = new Ticket(ticket);
     render(this._ticketsWrapper, ticketComponent);
   }
@@ -154,6 +154,12 @@ export default class TicketsModel {
     this._ticketsWrapper.innerHTML = '';
   }
 
+  _rerenderTicketsBoard() {
+    this._counter.setTicketsCounter(this._filteredTickets.length);
+    this._clearTicketsBoard();
+    this._renderTickets();
+  }
+
   _catchLoadErrorHandler() {
     this._renderError(
       'Произошла ошибка загрузки данных, пожалуйста, попробуйте позже',
@@ -166,10 +172,13 @@ export default class TicketsModel {
 
   _scrollHandler(entries) {
     entries.forEach(entry => {
+      render(this._ticketsWrapper, this._loader);
+
       if (entry.isIntersecting) {
-        console.log('It works!', entry);
-        this._renderTickets();
-        //check the amount if array.length % 5 !== 0
+        setTimeout(() => {
+          remove(this._loader);
+          this._renderTickets();
+        }, 2000);
       }
     });
   }
