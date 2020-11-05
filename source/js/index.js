@@ -8,11 +8,13 @@ import TicketsModel from './models/tickets';
 import FilterController from './controllers/filter-controller/filter-controller';
 import SortController from './controllers/sort-controller/sort-controller';
 import { render } from './utils/render.js';
+import BackToTop from './components/back-to-top/back-to-top';
 
 const api = new API();
-const loader = new Loader();
+const loaderComponent = new Loader();
+const backToTopComponent = new BackToTop();
 const counterComponent = new Counter();
-const ticketsModel = new TicketsModel(api, counterComponent, loader);
+const ticketsModel = new TicketsModel(api, counterComponent, loaderComponent);
 const pageHeaderComponent = new PageHeader();
 const pageMainComponent = new PageMain();
 const ticketsContainerComponent = new TicketsContainer();
@@ -35,6 +37,7 @@ const sortController = new SortController(ticketsWrapper, ticketsModel);
 
 sortController.render();
 
-render(ticketsWrapper, loader);
+render(ticketsWrapper, loaderComponent);
+render(mainContentWrapper, backToTopComponent);
 
 ticketsModel.initTickets(ticketsWrapper);
