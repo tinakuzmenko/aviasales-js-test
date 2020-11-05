@@ -5,8 +5,8 @@ import PageHeader from './components/page-header/page-header';
 import PageMain from './components/page-main/page-main';
 import TicketsContainer from './components/tickets/tickets';
 import TicketsModel from './models/tickets';
-import FilterController from './controllers/filter-controller/filter-controller';
-import SortController from './controllers/sort-controller/sort-controller';
+import FilterController from './controllers/filter-controller';
+import SortController from './controllers/sort-controller';
 import { render } from './utils/render.js';
 import BackToTop from './components/back-to-top/back-to-top';
 

@@ -1,7 +1,7 @@
-import { render } from '../../utils/render.js';
-import { debounce } from '../../utils/debounce';
-import Sort from '../../components/sort/sort';
-import { RenderPosition } from '../../utils/constants';
+import { render } from '../utils/render.js';
+import { debounce } from '../utils/debounce';
+import Sort from '../components/sort/sort';
+import { RenderPosition } from '../utils/constants';
 
 export default class SortController {
   constructor(container, ticketsModel) {

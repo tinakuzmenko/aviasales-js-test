@@ -7,6 +7,7 @@ Test Assignment for Aviasales made on Vanilla JavaScript (ES6).
 The project is a simple SPA, that imitates flight tickets search. Besides the basic tasks, I made many improvements to the app, such as:
 - responsive design,
 - infinite scroll & lazy loading,
+- button "Back To Top",
 - tickets counter,
 - error notifications.    
 
