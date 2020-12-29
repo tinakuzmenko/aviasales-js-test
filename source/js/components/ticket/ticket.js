@@ -36,7 +36,7 @@ export default class Ticket extends AbstractComponent {
         const flightDuration = this._convertMinutesToHours(
           ticketSegment.duration,
         );
-        const stopsLabel = this._countStops(ticketSegment.stops);
+        const stopsLabel = this._countStops(ticketSegment.stops.length);
 
         return `<div class="ticket__row">
             <div class="ticket__col">
@@ -83,16 +83,16 @@ export default class Ticket extends AbstractComponent {
     return `${duration}м`;
   }
 
-  _countStops(stops) {
-    switch (stops.length) {
-      case 0:
+  _countStops(stopsLength) {
+    switch (true) {
+      case stopsLength === 0:
         return 'Без пересадок';
-      case 1:
-        return `${stops.length} пересадка`;
-      case stops.length > 1 && stops.length < 5:
-        return `${stops.length} пересадки`;
-      case stops.length >= 5:
-        return `${stops.length} пересадок`;
+      case stopsLength === 1:
+        return `${stopsLength} пересадка`;
+      case stopsLength > 1 && stopsLength < 5:
+        return `${stopsLength} пересадки`;
+      case stopsLength >= 5:
+        return `${stopsLength} пересадок`;
       default:
         return `Без пересадок`;
     }
