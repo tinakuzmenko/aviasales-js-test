@@ -2,8 +2,8 @@ export const MINUTES_IN_HOUR = 60;
 export const MIN_SHOWN_TICKETS = 5;
 
 export const ServerUrl = {
-  SEARCH: 'https://front-test.beta.aviasales.ru/search',
-  TICKETS: 'https://front-test.beta.aviasales.ru/tickets',
+  SEARCH: 'https://front-test.dev.aviasales.ru/search',
+  TICKETS: 'https://front-test.dev.aviasales.ru/tickets',
 };
 
 export const Method = {
